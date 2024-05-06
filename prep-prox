@@ -1,0 +1,61 @@
+#!/bin/bash
+
+###################################
+#            Prox-Prep            #
+#     Written by 0n1cOn3, 2024    #
+#     (c) held in switzerland     #
+#              2024               #
+###################################
+
+# Function to install PVE
+install_pve() {
+    bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/misc/post-pve-install.sh)"
+}
+
+# Function to update microcode
+update_microcode() {
+    bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/misc/microcode.sh)"
+}
+
+# Function to set CPU scaling governor
+set_scaling_governor() {
+    bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/misc/scaling-governor.sh)"
+}
+
+# Function to backup host
+backup_host() {
+    bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/misc/host-backup.sh)"
+}
+
+# Function to install Netdata
+install_netdata() {
+    bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/misc/netdata.sh)"
+}
+
+# Main menu function
+main_menu() {
+    echo "Welcome to Proxmox VE Helper Script Menu"
+    echo "----------------------------------------"
+    echo "1. Install PVE"
+    echo "2. Update Microcode"
+    echo "3. Set CPU Scaling Governor"
+    echo "4. Backup Host"
+    echo "5. Install Netdata"
+    echo "6. Exit"
+    echo "----------------------------------------"
+    read -p "Enter your choice [1-6]: " choice
+    case $choice in
+        1) install_pve ;;
+        2) update_microcode ;;
+        3) set_scaling_governor ;;
+        4) backup_host ;;
+        5) install_netdata ;;
+        6) exit ;;
+        *) echo "Invalid choice. Please enter a number between 1 and 6." ;;
+    esac
+}
+
+# Main execution starts here
+while true; do
+    main_menu
+done
