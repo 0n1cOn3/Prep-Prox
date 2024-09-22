@@ -1,11 +1,25 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ###################################
 #            Prox-Prep            #
 #     Written by 0n1cOn3, 2024    #
 #     (c) held in switzerland     #
-#              2024               #
+#         2024 - V. 1.0.1         #
 ###################################
+
+# Enable strict mode
+set -euo pipefail
+
+# Error handling function
+error_handler() {
+    local exit_code=$?
+    local line_no=$1
+    echo "Error: Script failed at line $line_no with exit code $exit_code."
+    exit $exit_code
+}
+
+# Trap any error and call the error handler
+trap 'error_handler $LINENO' ERR
 
 # Function to install PVE
 install_pve() {
@@ -32,26 +46,100 @@ install_netdata() {
     bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/misc/netdata.sh)"
 }
 
-# Main menu function
-main_menu() {
+# Function to install Crowdsec
+install_crowdsec() {
+    bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/misc/crowdsec.sh)"
+}
+
+# Function to install Netbird (LCX)
+install_netbird() {
+    bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/misc/add-netbird-lxc.sh)"
+}
+
+# Function to install Mikrotik RouterOS (VM)
+install_mikrotik_routeros() {
+    bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/vm/mikrotik-routeros.sh)" 
+}
+
+# Function to install Mikrotik OpenWRT (VM)
+install_openwrt() {
+    bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/vm/openwrt.sh)"
+}
+
+# Function to install Tailscale (LXC)
+install_tailscale() {
+    bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/misc/add-tailscale-lxc.sh)"
+}
+
+# Function to install Webmin
+install_webmin() {
+    bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/misc/webmin.sh)"
+}
+
+# Function to install traefik (LXC)
+install_traefik() {
+    bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/ct/traefik.sh)"
+}
+
+# Function to install Zabbix (LXC)
+install_zabbix() {
+    bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/ct/zabbix.sh)"
+}
+
+# More tools menu
+tools_menu() {
+    echo "----------------------------------------"
     echo "Welcome to Proxmox VE Helper Script Menu"
     echo "        Scripts are provided by         "
     echo "    https://github.com/tteck/Proxmox    "
     echo "----------------------------------------"
-    echo "1. Install PVE"
-    echo "2. Update Microcode"
+    echo "1. Install Crowdsec"
+    echo "2. Install Netbird (LXC)"
+    echo "3. Install Mikrotik RouterOS (VM)"
+    echo "4. Install OpenWRT (VM)"
+    echo "5. Install Tailscale (LXC)"
+    echo "6. Install Webmin"
+    echo "7. Install traefik"
+    echo "8. Install Zabbix"
+    echo "9. Install Netdata"
+    echo "---------------------------------Page-1-"
+    read -p "Enter your choice [1-8]: " sub_choice
+    case $sub_choice in
+        1) install_crowdsec ;;
+        2) install_netbird ;;
+        3) install_mikrotik_routeros ;;
+        4) install_openwrt ;;
+        5) install_tailscale ;;
+        6) install_webmin ;;
+        7) install_traefik ;;
+        8) install_zabbix ;;
+        9) install_netdata ;;
+        10) main_menu ;;
+        *) echo "Invalid choice. Please enter a number between 1 and 10." ;;
+    esac
+}
+
+# Main menu function
+main_menu() {
+    echo "----------------------------------------"
+    echo "Welcome to Proxmox VE Helper Script Menu"
+    echo "        Scripts are provided by         "
+    echo "    https://github.com/tteck/Proxmox    "
+    echo "----------------------------------------"
+    echo "1. Install Post-PVE"
+    echo "2. Update CPU Microcode"
     echo "3. Set CPU Scaling Governor"
     echo "4. Backup Host"
-    echo "5. Install Netdata"
+    echo "5. More tools"
     echo "6. Exit"
-    echo "----------------------------------------"
+    echo "-----------------------------------Menu-"
     read -p "Enter your choice [1-6]: " choice
     case $choice in
         1) install_pve ;;
         2) update_microcode ;;
         3) set_scaling_governor ;;
         4) backup_host ;;
-        5) install_netdata ;;
+        5) tools_menu ;;
         6) exit ;;
         *) echo "Invalid choice. Please enter a number between 1 and 6." ;;
     esac
