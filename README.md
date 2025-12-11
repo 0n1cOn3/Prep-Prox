@@ -1,7 +1,7 @@
 # Proxprep
 
 > [!WARNING]
-> Repo is depricated!
+> Repo is deprecated!
 >
 > Use the official Helper-Script Manager: 
 
